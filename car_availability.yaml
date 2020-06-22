@@ -19,35 +19,6 @@ basePath: /cars/catalog
 produces:
 - application/json
 paths:
-  /v1/vehicles:
-    get:
-      parameters:
-      - name: brand
-        description: The Avis, Budget, or Payless brand name.
-        in: query
-        type: string
-        enum:
-        - Avis
-        - Budget
-        - Payless
-      responses:
-        "200":
-          $ref: '#/responses/car_availability_bestbuy_v1_response'
-          schema:
-            $ref: '#/definitions/car_availability_bestbuy_v1_response'
-        "400":
-          $ref: '#/responses/error_response_400'
-        "404":
-          $ref: '#/responses/error_response_404'
-        "405":
-          $ref: '#/responses/error_response_405'
-        "406":
-          $ref: '#/responses/error_responce_406'
-        "415":
-          $ref: '#/responses/error_response_415'
-        "500":
-          $ref: '#/responses/error_response_500'
-      summary: /v1/vehicles
   /v1/vehicles/rates:
     get:
       responses:
@@ -152,6 +123,113 @@ paths:
         Worldwide Discount (AWD), Budget Car Discount (BCD), or a Payless Discount
         Number (PDN) code.
       in: query
+      type: string
+    - name: coupon_code
+      description: The promotional coupon code number to be applied to the reservation
+        rate.
+      in: query
+      type: string
+    - name: iata_number
+      description: International Air Transport Association (IATA) number. This is
+        an identifier used by travel agents that allows the rental car company to
+        pay the agent a commission for the rental.
+      in: query
+      type: string
+    - name: transaction_id
+      description: In the instance a request has failed, transaction identifiers allow
+        you to quickly identify the failed request. The following request transaction
+        identifier may be used by your application to identify a request. We recommend
+        that you use this identifier in every request.
+      in: query
+      type: string
+  /v1/vehicles:
+    get:
+      parameters:
+      - name: brand
+        description: The Avis, Budget, or Payless brand name.
+        in: query
+        type: string
+        enum:
+        - Avis
+        - Budget
+        - Payless
+      responses:
+        "200":
+          $ref: '#/responses/car_availability_bestbuy_v1_response'
+          schema:
+            $ref: '#/definitions/car_availability_bestbuy_v1_response'
+        "400":
+          $ref: '#/responses/error_response_400'
+        "404":
+          $ref: '#/responses/error_response_404'
+        "405":
+          $ref: '#/responses/error_response_405'
+        "406":
+          $ref: '#/responses/error_responce_406'
+        "415":
+          $ref: '#/responses/error_response_415'
+        "500":
+          $ref: '#/responses/error_response_500'
+      summary: /v1/vehicles
+    parameters:
+    - name: brand
+      description: The Avis, Budget, or Payless brand name.
+      in: query
+      required: true
+      type: string
+      enum:
+      - Avis
+      - Budget
+      - Payless
+    - name: pickup_date
+      description: ISO 8601 date and time of pickup.
+      in: query
+      required: true
+      type: string
+    - name: pickup_location
+      description: Rental car pickup location code.
+      in: query
+      required: true
+      type: string
+    - name: age
+      description: Driver’s age. This might influence the rates. Will be superseded
+        by date of birth found in the profile provided in “membership_code”.
+      in: query
+      type: number
+    - name: date_of_birth
+      description: Driver’s date of birth. This might influence the rates. Will be
+        superseded by “age” parameter or date of birth found in the profile provided
+        in “membership_code”
+      in: query
+      type: string
+    - name: membership_code
+      description: The brand membership program code. This can be an Avis wizard number,
+        Budget customer number, or Payless number.
+      in: query
+      type: string
+    - name: dropoff_date
+      description: ISO 8601 date and time of dropoff.
+      in: query
+      required: true
+      type: string
+    - name: dropoff_location
+      description: Rental car dropoff location code.
+      in: query
+      required: true
+      type: string
+    - name: country_code
+      description: 2-character ISO 3166 customer country code.
+      in: query
+      required: true
+      type: string
+      maxLength: 2
+      minLength: 2
+    - name: discount_code
+      description: The rental vehicle brand discount code. This field can be an Avis
+        Worldwide Discount (AWD), Budget Car Discount (BCD), or a Payless Discount
+        Number (PDN) code
+      in: query
+      required: false
       type: string
     - name: coupon_code
       description: The promotional coupon code number to be applied to the reservation
