@@ -32,39 +32,11 @@ paths:
       tags:
       - car_reservation
       parameters:
-      - name: brand
-        description: The Avis, Budget, or Payless brand name.
-        in: query
-        required: true
-        type: string
-        enum:
-        - Avis
-        - Budget
-        - Payless
-      - name: confirmation_number
-        description: The confirmation number of the rental car reservation. The confirmation
-          number is retrieved from the Create Reservation endpoint.
-        in: query
-        required: true
-        type: string
-      - name: last_name
-        description: Last name of the user.
-        in: query
-        required: true
-        type: string
-      - name: transaction_id
-        description: 'The transaction identifier used to identify and troubleshoot
-          a given request. '
-        in: query
-        required: false
-        type: string
-      - name: client_id
-        description: Your client identifier.
-        in: header
-        required: true
-        type: string
-        maxLength: 32
-        minLength: 32
+      - $ref: '#/parameters/brand'
+      - $ref: '#/parameters/confirmation_number'
+      - $ref: '#/parameters/last_name'
+      - $ref: '#/parameters/transaction_id'
+      - $ref: '#/parameters/client_id'
       responses:
         "201":
           description: The following demonstrates an example of a successful request
@@ -545,6 +517,40 @@ paths:
             is 401 or 403, which the service wants to mask for security reasons.
           schema:
             $ref: '#/definitions/error_404'
+          examples:
+            application/json:
+              status:
+                request_time: 2019-01-04T15:15:30Z
+                request_errors: 1
+                errors:
+                - code: "404"
+                  message: Resource Not Found
+                  reason: resource_failure
+                  details: Server cannot find the requested resource. This may be
+                    due to incorrect URI or a resource that is not available.
+                - code: "223"
+                  message: Not Found
+                  reason: Invalid pickup_location.
+                  details: The pick-up location entered is Sold Out for the dates
+                    you have entered
+                - code: "14381"
+                  message: Not Found
+                  reason: 'A One-Way Rental between given pickup_location and dropoff_location
+                    is not available '
+                  details: 'A One-Way Rental between given pickup_location and dropoff_location
+                    is not available '
+                - code: "226"
+                  message: Not Found
+                  reason: Invalid dropoff_location.
+                  details: There are no locations available for your Return address.
+                - code: "225"
+                  message: Not Found
+                  reason: Invalid pickup_location.
+                  details: There are no locations available for your Pick-up address.
+                - code: "227"
+                  message: Not Found
+                  reason: Invalid pickup_location and dropoff_location.
+                  details: Sorry! No <brand> locations are available in address provided.
         "405":
           description: A request method is not supported for the requested resource;
             for example, a GET request on a form that requires data to be presented
@@ -577,9 +583,43 @@ paths:
                   reason: Not Accecptable
                   details: org.mule.module.apikit.exception.NotAcceptableException
         "415":
-          $ref: '#/responses/error_response_415'
+          description: The request entity has a media type which the server or resource
+            does not support. For example, the client uploads an image as image/svg+xml,
+            but the server requires that images use a different format.
+          schema:
+            $ref: '#/definitions/error_415'
+          examples:
+            application/json:
+              status:
+                request_time: 2018-10-17T13:05:10Z
+                request_errors: 1
+                errors:
+                - code: "415"
+                  message: Unsupported Media Type
+                  reason: Unsupported Media Type
+                  details: org.mule.module.apikit.exception.UnsupportedMediaTypeException
         "500":
-          $ref: '#/responses/error_response_500'
+          description: 500 Internal Server Error is returned when a system or application
+            error has occurred. It generally indicates that something unexpected has
+            gone wrong on the server. This is used for a standard server side exception
+            for a persistent error on the server side.
+          schema:
+            $ref: '#/definitions/error_500'
+          examples:
+            application/json:
+              status:
+                request_time: 2019-01-04T15:15:30Z
+                request_errors: 1
+                errors:
+                - code: "40018"
+                  message: Service exception
+                  reason: Service exception
+                  details: Socket timeout from IMS Connect
+                - code: "610"
+                  message: Service exception
+                  reason: System exception from e-com backend.
+                  details: System Exception occurred during location search.Please
+                    check the log for details.
       security:
       - oAUTH: []
       summary: view reservation
@@ -587,15 +627,8 @@ paths:
       tags:
       - car_reservation
       parameters:
-      - name: Authorization
-        description: Used to send a valid OAuth 2 access token. Do not use with the
-          "access_token" query string parameter
-        in: header
-        type: string
-      - name: client_id
-        description: ""
-        in: header
-        type: string
+      - $ref: '#/parameters/Authorization'
+      - $ref: '#/parameters/client_id'
       - name: body
         description: The rental vehicle reservation that the user would like to cancel.
         schema:
@@ -917,38 +950,22 @@ paths:
             is 401 or 403, which the service wants to mask for security reasons.
           schema:
             $ref: '#/definitions/error_404'
-          examples:
-            application/json:
-              status:
-                request_time: 2019-01-04T15:15:30Z
-                request_errors: 1
-                errors:
-                - code: "404"
-                  message: Resource Not Found
-                  reason: resource_failure
-                  details: Server cannot find the requested resource. This may be
-                    due to incorrect URI or a resource that is not available.
-                - code: "223"
-                  message: Not Found
-                  reason: Invalid pickup_location.
-                  details: The pick-up location entered is Sold Out for the dates
-                    you have entered
-                - code: "14036"
-                  message: Not Found
-                  reason: Reservation already cancelled
-                  details: Reservation is already cancelled for the given confirmation_number.
-                - code: "14381"
-                  message: Not Found
-                  reason: 'A One-Way Rental between given pickup_location and dropoff_location
-                    is not available '
-                  details: 'A One-Way Rental between given pickup_location and dropoff_location
-                    is not available '
         "405":
           description: A request method is not supported for the requested resource;
             for example, a GET request on a form that requires data to be presented
             via POST, or a PUT request on a read-only resource.
           schema:
             $ref: '#/definitions/error_405'
+          examples:
+            application/json:
+              status:
+                request_time: 2019-01-04T15:15:30Z
+                request_errors: 1
+                errors:
+                - code: "405"
+                  message: Method Not Allowed
+                  reason: Method Not Allowed
+                  details: org.mule.module.apikit.exception.MethodNotAllowedException
         "406":
           description: The requested resource is capable of generating only content
             not acceptable according to the Accept headers sent in the request.
@@ -965,9 +982,10 @@ paths:
                   reason: Not Accecptable
                   details: org.mule.module.apikit.exception.NotAcceptableException
         "415":
-          description: The request entity has a media type which the server or resource
-            does not support. For example, the client uploads an image as image/svg+xml,
-            but the server requires that images use a different format.
+          description: 500 Internal Server Error is returned when a system or application
+            error has occurred. It generally indicates that something unexpected has
+            gone wrong on the server. This is used for a standard server side exception
+            for a persistent error on the server side.
           schema:
             $ref: '#/definitions/error_415'
           examples:
@@ -1045,18 +1063,8 @@ paths:
           $ref: '#/definitions/create_modify_reservation_v1_request'
         in: body
         required: true
-      - name: client_id
-        description: Your client identifier.
-        in: header
-        required: true
-        type: string
-        maxLength: 32
-        minLength: 32
-      - name: Authorization
-        description: ""
-        in: header
-        required: true
-        type: string
+      - $ref: '#/parameters/client_id'
+      - $ref: '#/parameters/Authorization'
       responses:
         "201":
           description: The following demonstrates an example of a successful request
@@ -1626,18 +1634,8 @@ paths:
       tags:
       - car_reservation
       parameters:
-      - name: Authorization
-        description: Used to send a valid OAuth 2 access token. Do not use with the
-          "access_token" query string parameter.
-        in: header
-        type: string
-      - name: client_id
-        description: Your client identifier.
-        in: header
-        required: true
-        type: string
-        maxLength: 32
-        minLength: 32
+      - $ref: '#/parameters/Authorization'
+      - $ref: '#/parameters/client_id'
       - name: body
         description: The rental vehicle reservation details, including the rate, insurance
           coverage, rental extras (such as GPS), passenger, and payment information.
@@ -3828,6 +3826,51 @@ definitions:
         title: Central lock
         description: Flag to indicate the central locking feature of ABG car.
         type: boolean
+parameters:
+  brand:
+    name: brand
+    description: The Avis, Budget, or Payless brand name.
+    in: query
+    required: true
+    type: string
+    enum:
+    - Avis
+    - Budget
+    - Payless
+  confirmation_number:
+    name: confirmation_number
+    description: The confirmation number of the rental car reservation. The confirmation
+      number is retrieved from the Create Reservation endpoint.
+    in: query
+    required: true
+    type: string
+  last_name:
+    name: last_name
+    description: Last name of the user.
+    in: query
+    required: true
+    type: string
+  transaction_id:
+    name: transaction_id
+    description: 'The transaction identifier used to identify and troubleshoot a given
+      request. '
+    in: query
+    required: false
+    type: string
+  client_id:
+    name: client_id
+    description: Your client identifier.
+    in: header
+    required: true
+    type: string
+    maxLength: 32
+    minLength: 32
+  Authorization:
+    name: Authorization
+    description: Used to send a valid OAuth 2 access token. Do not use with the "access_token"
+      query string parameter
+    in: header
+    type: string
 responses:
   create_modify_reservation_v1_response:
     description: The rental vehicle reservation details, including the rate, insurance
