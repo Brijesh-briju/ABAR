@@ -445,43 +445,13 @@ paths:
       - oAUTH: []
       summary: car location
     parameters:
-    - name: client_id
-      description: Your client identifier.
-      in: header
-      required: true
-      type: string
-      maxLength: 50
-      minLength: 8
-    - name: brand
-      description: The Avis, Budget, or Payless brand name.
-      in: query
-      required: false
-      type: string
-      default: Avis,Budget,Payless
-      pattern: ^(Avis|Budget|Payless)(,(Avis|Budget|Payless))*$
-    - name: country_code
-      description: 2-letter ISO 3166 country code of the product location.
-      in: query
-      type: string
-      maxLength: 2
-      minLength: 2
-    - name: keyword
-      description: The location keyword you would like to search.
-      in: query
-      type: string
-    - name: transaction_id
-      description: The transaction identifier used to identify and troubleshoot a
-        given request.
-      in: query
-      type: string
-    - name: lat
-      description: Latitude of the product location you would like to search.
-      in: query
-      type: string
-    - name: long
-      description: Longitude of the product location you would like to search.
-      in: query
-      type: string
+    - $ref: '#/parameters/brand'
+    - $ref: '#/parameters/country_code'
+    - $ref: '#/parameters/keyword'
+    - $ref: '#/parameters/transaction_id'
+    - $ref: '#/parameters/client_id'
+    - $ref: '#/parameters/lat'
+    - $ref: '#/parameters/long'
 definitions:
   success_details:
     title: Success details
@@ -763,6 +733,54 @@ definitions:
           allOf:
           - $ref: '#/definitions/status'
           - description: A container for the error details
+parameters:
+  brand:
+    name: brand
+    description: The Avis, Budget, or Payless brand name.
+    in: query
+    required: true
+    type: string
+    enum:
+    - Avis
+    - Budget
+    - Payless
+  country_code:
+    name: country_code
+    description: 2-letter ISO 3166 country code of the product location.
+    in: query
+    type: string
+    maxLength: 2
+    minLength: 2
+  keyword:
+    name: keyword
+    description: The location keyword you would like to search.
+    in: query
+    type: string
+  transaction_id:
+    name: transaction_id
+    description: 'The transaction identifier used to identify and troubleshoot a given
+      request. '
+    in: query
+    required: false
+    type: string
+  client_id:
+    name: client_id
+    description: Your client identifier.
+    in: header
+    required: true
+    type: string
+    maxLength: 32
+    minLength: 32
+  lat:
+    name: lat
+    description: Latitude of the product location you would like to search.
+    in: query
+    type: string
+  long:
+    name: long
+    description: Longitude of the product location you would like to search.
+    in: query
+    type: string
 responses:
   error_responce_406:
     description: The requested resource is capable of generating only content not
