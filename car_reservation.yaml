@@ -2641,56 +2641,6 @@ definitions:
         - title: Rate Qualifiers
       driver:
         $ref: '#/definitions/driver'
-  coupon:
-    title: Coupon
-    description: Coupon infomation for reservation discounts and benefits.
-    required:
-    - code
-    - coupon_amount
-    - quantity
-    - type
-    type: object
-    properties:
-      code:
-        allOf:
-        - $ref: '#/definitions/code'
-        - title: Coupon code
-          description: The coupon code to be applied to the reservation rate.
-        example: MUZZ014
-      type:
-        allOf:
-        - $ref: '#/definitions/coupon_type'
-        - title: Coupon description
-          description: Description of the coupon code that was specified in the request.
-          type: string
-        example: 25USD Off with Rental of CSS/Paperless Coupon
-      quantity:
-        title: Quantity
-        description: The number of coupon codes to apply to the reservation.
-        allOf:
-        - $ref: '#/definitions/quantity'
-        example: 1
-      coupon_applied:
-        title: Coupon applied flag
-        description: Indicates that a coupon code is valid and was successfully applied
-          for the reservation.
-        type: boolean
-        example: false
-      coupon_amount:
-        allOf:
-        - $ref: '#/definitions/amount'
-        - title: Coupon amount
-        - description: The amount of the coupon discount applied to the cost of the
-            reservation.
-        example: 0
-      coupon_extras:
-        title: Coupon extras
-        description: The ancillary products tied to the coupon. For example, if the
-          coupon code specified in the request applies to the cost of a child safety
-          seat, then CSS will be returned in this field.
-        type: array
-        items:
-          $ref: '#/definitions/extra'
   membership:
     title: Frequent Traveler Programs (FTPs)
     description: The Frequent Traveler Program (FTP) to be applied to the reservation.
@@ -3826,6 +3776,56 @@ definitions:
         title: Central lock
         description: Flag to indicate the central locking feature of ABG car.
         type: boolean
+  coupon:
+    title: Coupon
+    description: Coupon infomation for reservation discounts and benefits.
+    required:
+    - code
+    - coupon_amount
+    - quantity
+    - type
+    type: object
+    properties:
+      code:
+        allOf:
+        - $ref: '#/definitions/code'
+        - title: Coupon code
+          description: The coupon code to be applied to the reservation rate.
+        example: MUZZ014
+      type:
+        allOf:
+        - $ref: '#/definitions/coupon_type'
+        - title: Coupon description
+          description: Description of the coupon code that was specified in the request.
+          type: string
+        example: 25USD Off with Rental of CSS/Paperless Coupon
+      quantity:
+        title: Quantity
+        description: The number of coupon codes to apply to the reservation.
+        allOf:
+        - $ref: '#/definitions/quantity'
+        example: 1
+      coupon_applied:
+        title: Coupon applied flag
+        description: Indicates that a coupon code is valid and was successfully applied
+          for the reservation.
+        type: boolean
+        example: false
+      coupon_amount:
+        allOf:
+        - $ref: '#/definitions/amount'
+        - title: Coupon amount
+        - description: The amount of the coupon discount applied to the cost of the
+            reservation.
+        example: 0
+      coupon_extras:
+        title: Coupon extras
+        description: The ancillary products tied to the coupon. For example, if the
+          coupon code specified in the request applies to the cost of a child safety
+          seat, then CSS will be returned in this field.
+        type: array
+        items:
+          $ref: '#/definitions/extras'
 parameters:
   brand:
     name: brand
@@ -4429,23 +4429,6 @@ responses:
             message: Unsupported Media Type
             reason: Unsupported Media Type
             details: org.mule.module.apikit.exception.UnsupportedMediaTypeException
-  cancle_reservation_v1_response:
-    description: The following demonstrates an example of a successful request for
-      this endpoint
-    schema:
-      $ref: '#/definitions/cancle_reservation_v1_response'
-    examples:
-      application/json:
-        status:
-          request_time: 2018-10-25T12:01:54Z
-          success:
-          - code: "200"
-            message: Success
-            details: The reservation was successfully cancelled.
-        transaction:
-          transaction_id: "89474934"
-        product:
-          brand: Avis
   view_reservation_v1_response:
     description: The following demonstrates an example of a successful request for
       this endpoint
@@ -4628,6 +4611,23 @@ responses:
             description: Under Age restrictions and fees apply. Please review location
               terms and conditions or contact location to confirm rental policies
               and fees.
+  cancle_reservation_v1_response:
+    description: The following demonstrates an example of a successful request for
+      this endpoint
+    schema:
+      $ref: '#/definitions/cancle_reservation_v1_response'
+    examples:
+      application/json:
+        status:
+          request_time: 2018-10-25T12:01:54Z
+          success:
+          - code: "200"
+            message: Success
+            details: The reservation was successfully cancelled.
+        transaction:
+          transaction_id: "89474934"
+        product:
+          brand: Avis
 securityDefinitions:
   oAUTH:
     flow: application
