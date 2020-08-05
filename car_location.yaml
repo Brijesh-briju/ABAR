@@ -658,9 +658,11 @@ definitions:
         values, ranges and format.'
     - required:
       - status
+    - type: object
     - properties:
         status:
-          $ref: '#/definitions/status'
+          allOf:
+          - $ref: '#/definitions/status'
   error_404:
     allOf:
     - $ref: '#/definitions/error_response'
