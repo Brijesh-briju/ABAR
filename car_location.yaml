@@ -498,24 +498,6 @@ definitions:
         details:
           description: Description of the error
           type: string
-  error_status:
-    title: Error status
-    description: A container for the error details
-    required:
-    - request_time
-    - errors
-    - request_errors
-    type: object
-    properties:
-      request_time:
-        allOf:
-        - $ref: '#/definitions/date_time'
-        - description: The time stamp of the request
-      request_errors:
-        description: The number of errors that occurred
-        type: integer
-      errors:
-        $ref: '#/definitions/error_details'
   error_response:
     required:
     - status
@@ -541,18 +523,6 @@ definitions:
         allOf:
         - $ref: '#/definitions/success_details'
         - description: The HTTP success code, message and details
-  car_location_v1_response:
-    title: 200 Success Response
-    description: The following demonstrates an example of successful request for this
-      endpoint.
-    type: object
-    properties:
-      status:
-        $ref: '#/definitions/status'
-      transaction:
-        $ref: '#/definitions/transaction'
-      locations:
-        $ref: '#/definitions/location'
   location_address:
     title: Address
     description: Address information that you would like to associate to the user
@@ -599,45 +569,6 @@ definitions:
         description: Geographic longitude of the location.
         type: string
         example: -74.187506
-  location:
-    title: Location Details
-    description: The list of available locations within a certain radius of the specified
-      latitude/longitude
-    type: array
-    items:
-      properties:
-        brand:
-          description: ABG brand name
-          enum:
-          - Avis
-          - Budget
-          - Payless
-          type: string
-          example: Avis
-        code:
-          description: 3-5 character alphanumeric location or airport code.
-          type: string
-          example: BOS
-        name:
-          description: Name of the product location.
-          type: string
-          example: Boston Logan Intl Airport
-        telephone:
-          description: Phone number of the product location.
-          type: string
-          example: 617-568-6600
-        hours:
-          description: Operating hours of the product location.
-          type: string
-          example: Sun-Sat Open 24 hours
-        airport_location:
-          description: Indicates whether the product location is an airport.
-          type: boolean
-        distance:
-          description: Distance from the specified location for the distance unit.
-          type: number
-        address:
-          $ref: '#/definitions/location_address'
   transaction:
     title: Transaction
     description: In the instance a request has failed, transaction identifiers allow
@@ -735,6 +666,80 @@ definitions:
           allOf:
           - $ref: '#/definitions/status'
           - description: A container for the error details
+  car_location_v1_response:
+    title: 200 Success Response
+    description: The following demonstrates an example of successful request for this
+      endpoint.
+    type: object
+    properties:
+      status:
+        allOf:
+        - $ref: '#/definitions/status'
+      transaction:
+        allOf:
+        - $ref: '#/definitions/transaction'
+      locations:
+        allOf:
+        - $ref: '#/definitions/location'
+  error_status:
+    title: Error status
+    description: A container for the error details
+    required:
+    - request_time
+    - errors
+    - request_errors
+    type: object
+    properties:
+      request_time:
+        allOf:
+        - $ref: '#/definitions/date_time'
+        - description: The time stamp of the request
+      request_errors:
+        description: The number of errors that occurred
+        type: integer
+      errors:
+        allOf:
+        - $ref: '#/definitions/error_details'
+  location:
+    title: Location Details
+    description: The list of available locations within a certain radius of the specified
+      latitude/longitude
+    type: array
+    items:
+      properties:
+        brand:
+          description: ABG brand name
+          enum:
+          - Avis
+          - Budget
+          - Payless
+          type: string
+          example: Avis
+        code:
+          description: 3-5 character alphanumeric location or airport code.
+          type: string
+          example: BOS
+        name:
+          description: Name of the product location.
+          type: string
+          example: Boston Logan Intl Airport
+        telephone:
+          description: Phone number of the product location.
+          type: string
+          example: 617-568-6600
+        hours:
+          description: Operating hours of the product location.
+          type: string
+          example: Sun-Sat Open 24 hours
+        airport_location:
+          description: Indicates whether the product location is an airport.
+          type: boolean
+        distance:
+          description: Distance from the specified location for the distance unit.
+          type: number
+        address:
+          allOf:
+          - $ref: '#/definitions/location_address'
 parameters:
   brand:
     name: brand
